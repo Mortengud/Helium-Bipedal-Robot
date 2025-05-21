@@ -10,13 +10,13 @@ import matplotlib.pyplot as plt
 from datetime import datetime
 import pandas as pd
 
-# === Konfigurasjon for Raspberry Pi Flask-server ===
+# Configuration for Flask-server
 RASPBERRY_PI_IP = "192.168.50.177"
 SET_PARAMS_URL = f"http://{RASPBERRY_PI_IP}:5000/set_params"
 START_URL = f"http://{RASPBERRY_PI_IP}:5000/start"
 STOP_URL = f"http://{RASPBERRY_PI_IP}:5000/stop"
 
-# === MoCap-funksjoner ===
+# MoCap
 async def connect_mocap():
     connection = await qtm_rt.connect("192.168.50.50")
     if connection is None:
@@ -101,13 +101,13 @@ def plot_results(distances, log_file):
     plt.savefig(log_file.replace(".csv", ".png"))
     plt.show() 
 
-# === Les parameterkombinasjoner fra CSV ===
+# Read params from CSV
 def load_knee_combinations_from_csv(path="grid_search.csv"):
     df = pd.read_csv(path)
     combos = df[["knee1_min", "knee1_max", "knee2_min", "knee2_max"]].values.tolist()
     return combos
 
-# === Optimaliser ===
+# Optimize
 async def optimize_gait():
     combos = load_knee_combinations_from_csv()[75:]
     csv_data = []
@@ -144,7 +144,7 @@ async def optimize_gait():
 
         distances.append(distance)
 
-    # Lagre CSV
+    # Save to CSV
     with open(log_file, mode="w", newline="") as file:
         writer = csv.writer(file)
         writer.writerow(["Iteration", "Knee1 Min", "Knee1 Max", "Knee2 Min", "Knee2 Max", "Speed", "Distance"])
@@ -153,6 +153,6 @@ async def optimize_gait():
     print(f"\n✅ Grid Search fullført!")
     plot_results(distances, log_file)
 
-# === Kall main ===
+# Call main
 if __name__ == "__main__":
     asyncio.run(optimize_gait())
