@@ -8,20 +8,20 @@ import os
 from flask import Flask, request, jsonify
 from ServoPi import PWM
 
-# === Initialize Flask server ===
+# Initialize Flask server
 app = Flask(__name__)
 
-# === Initialize PWM class for servos ===
+# PWM class for servos
 pwm = PWM(0x6F)  
 pwm.set_pwm_freq(50)  
 
-# === Servo channels ===
+# Servo channels
 SERVO_HIP1 = 0   # Right hip
 SERVO_KNEE1 = 2  # Right knee
 SERVO_HIP2 = 3   # Left hip
 SERVO_KNEE2 = 4  # Left knee
 
-# === Default servo parameters ===
+# Default servo parameters
 servo_params = {
     "hip1_min": 340, "hip1_max": 220, "hip1_phase": 0.0,
     "hip2_min": 340, "hip2_max": 220, "hip2_phase": 0.0,
@@ -34,7 +34,7 @@ running = False
 params_received = False  
 lock = threading.Lock()  
 
-# === Path to CSV log file for parameter logging ===
+# Path to CSV log file for parameter logging
 LOG_FILE_PATH = "/home/morten/Dokumenter/robot_params_log.csv"
 
 def log_parameters(params):
@@ -56,7 +56,7 @@ def log_parameters(params):
             params["speed"]
         ])
 
-# === Class for servo control using min-max sine wave ===
+# Class for servo control using min-max sine wave
 class MinMaxController:
     def __init__(self, servo_channel, min_val, max_val, phase_shift=0.0, invert=False):
         self.channel = servo_channel
@@ -79,7 +79,7 @@ class MinMaxController:
         pos = self.compute_position(t)
         pwm.set_pwm(self.channel, 0, pos)
 
-# === Set all servos to idle (min) positions ===
+# Set all servos to idle (min) positions
 def set_idle_position():
     pwm.set_pwm(SERVO_HIP1, 0, 340)
     pwm.set_pwm(SERVO_KNEE1, 0, 450)
@@ -131,7 +131,7 @@ def status():
         "Parameters Received": params_received
     }), 200
 
-# === Main robot loop running in a background thread ===
+# Main robot loop running in a background thread
 def robot_loop():
     global running
     t = 0.0
@@ -171,18 +171,18 @@ import csv
 from flask import Flask, request, jsonify
 from ServoPi import PWM
 
-# === Initialize Flask server ===
+#Initialize Flask server
 app = Flask(__name__)
 
 # === Initialize PWM for servos ===
 pwm = PWM(0x6F)  # Address of PWM driver
 pwm.set_pwm_freq(50)  # 50 Hz for servos
 
-# === Servo channels ===
+# Servo channels
 SERVO_KNEE1 = 2  # Right knee
 SERVO_KNEE2 = 4  # Left knee
 
-# === Default servo parameters ===
+# Default servo parameters
 servo_params = {
     "knee1_min": 450, "knee1_max": 320, "knee1_phase": 0.0,
     "knee2_min": 450, "knee2_max": 320, "knee2_phase": 0.0,
@@ -208,7 +208,7 @@ def log_parameters(params):
                          params["knee1_phase"], params["knee2_phase"],
                          params["speed"]])
 
-# === MinMaxController class for knee movement ===
+# MinMaxController class for knee movement
 class MinMaxController:
     def __init__(self, servo_channel, min_val, max_val, phase_shift=0.0, invert=False):
         self.channel = servo_channel
