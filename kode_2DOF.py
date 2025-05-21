@@ -10,7 +10,7 @@ import csv
 import matplotlib.pyplot as plt
 from datetime import datetime
 
-# === Configuration for Raspberry Pi Flask server ===
+# Configuration for Raspberry Pi Flask server
 RASPBERRY_PI_IP = "192.168.50.177"
 SET_PARAMS_URL = f"http://{RASPBERRY_PI_IP}:5000/set_params"
 START_URL = f"http://{RASPBERRY_PI_IP}:5000/start"
@@ -19,18 +19,18 @@ STATUS_URL = f"http://{RASPBERRY_PI_IP}:5000/"
 
 distances = []
 
-# === Servo limits ===
+# Servo limits
 SA_BOUNDS = {
     "hip1_min": 340, "hip1_max": 220,
     "hip2_min": 340, "hip2_max": 220,
     "knee1_min": 450, "knee1_max": 320,
     "knee2_min": 450, "knee2_max": 320,
-    "speed": (0.0015, 0.0015),
+    "speed": 0.0015,
     "hip1_phase": (0.0, 0.0), "hip2_phase": (0.0, 0.5),
     "knee1_phase": (0.0, 0.0), "knee2_phase": (0.0, 0.5)
 }
 
-# === Initial values ===
+#Initial values
 best_params = {
     "hip1_min": 340, "hip1_max": 220,
     "hip2_min": 340, "hip2_max": 220,
@@ -41,7 +41,7 @@ best_params = {
     "knee1_phase": 0.0, "knee2_phase": 0.5
 }
 
-# === Motion Capture connection ===
+# Motion Capture connection
 async def connect_mocap():
     connection = await qtm_rt.connect("192.168.50.50")
     if connection is None:
